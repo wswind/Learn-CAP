@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using CommonLib.Sql;
+using static Api1.Services.SubscriberService;
+using Api1.Services;
 
 namespace Api1
 {
@@ -25,6 +20,18 @@ namespace Api1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSqlFactoryBuilder().AddSingleSqlFactory("Default");
+            services.AddTransient<ISubscriberService, SubscriberService>();
+            services.AddCap(x =>
+            {
+                // If you are using ADO.NET, choose to add configuration you needed：
+                x.UseSqlServer("Server=.;Database=BFF;Trusted_Connection=True;MultipleActiveResultSets=true");
+                x.UseRabbitMQ(o => {
+                    o.HostName = "192.168.56.10";
+                    o.UserName = "rabbit";
+                    o.Password = "rabbit";
+                });
+            });
             services.AddControllers();
         }
 
