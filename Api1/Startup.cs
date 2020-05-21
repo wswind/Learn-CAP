@@ -20,12 +20,16 @@ namespace Api1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            const string connName = "Default";
+            
             services.AddSqlFactoryBuilder().AddSingleSqlFactory("Default");
             services.AddTransient<ISubscriberService, SubscriberService>();
+
+            string connString = Configuration.GetConnectionString(connName); 
             services.AddCap(x =>
             {
                 // If you are using ADO.NET, choose to add configuration you needed：
-                x.UseSqlServer("Server=.;Database=BFF;Trusted_Connection=True;MultipleActiveResultSets=true");
+                x.UseSqlServer(connString);
                 x.UseRabbitMQ(o => {
                     o.HostName = "192.168.56.10";
                     o.UserName = "rabbit";
