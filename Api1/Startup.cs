@@ -31,6 +31,8 @@ namespace Api1
                     o.UserName = "rabbit";
                     o.Password = "rabbit";
                 });
+                // Register Dashboard http://localhost:5000/cap
+                x.UseDashboard();
             });
             services.AddControllers();
         }

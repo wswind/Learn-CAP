@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +12,7 @@
     <PackageReference Include="dapper" Version="2.0.35" />
     <PackageReference Include="dapper.contrib" Version="2.0.35" />
     <PackageReference Include="DotNetCore.CAP" Version="3.0.3" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.0.3" />
     <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.0.3" />
     <PackageReference Include="DotNetCore.CAP.SqlServer" Version="3.0.3" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.3" />
