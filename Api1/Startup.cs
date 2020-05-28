@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using CommonLib.Sql;
 using static Api1.Services.SubscriberService;
 using Api1.Services;
+using Api1.EfDbContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api1
 {
@@ -21,13 +23,16 @@ namespace Api1
         public void ConfigureServices(IServiceCollection services)
         {
             const string connName = "Default";
-            
+       
             services.AddSqlFactoryBuilder().AddSingleSqlFactory("Default");
             services.AddTransient<ISubscriberService, SubscriberService>();
 
-            string connString = Configuration.GetConnectionString(connName); 
+            string connString = Configuration.GetConnectionString(connName);
+            services.AddDbContext<AppDbContext>(x=>x.UseSqlServer(connString));
+
             services.AddCap(x =>
             {
+                x.UseEntityFramework<AppDbContext>();
                 // If you are using ADO.NET, choose to add configuration you needed：
                 x.UseSqlServer(connString);
                 x.UseRabbitMQ(o => {

@@ -1,14 +1,12 @@
-﻿using Api1.Poco;
-using DotNetCore.CAP;
+﻿using DotNetCore.CAP;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.Reflection.Emit;
 
 namespace Api1.Services
 {
     public interface ISubscriberService
     {
-        public void CheckReceivedMessage(TestTable testTable);
+        public void CheckReceivedMessageDapper(Api1.Poco.TestTable testTable);
+        public void CheckReceivedMessageEfCore(Api1.Models.TestTable testTable);
     }
     public class SubscriberService : ISubscriberService, ICapSubscribe
     {
@@ -19,8 +17,14 @@ namespace Api1.Services
             _logger = logger;
         }
 
-        [CapSubscribe("testtable.insert")]
-        public void CheckReceivedMessage(TestTable testTable)
+        [CapSubscribe("testtable.insert.dapper")]
+        public void CheckReceivedMessageDapper(Api1.Poco.TestTable testTable)
+        {
+            _logger.LogDebug("get message with testtable");
+        }
+
+        [CapSubscribe("testtable.insert.efcore")]
+        public void CheckReceivedMessageEfCore(Api1.Models.TestTable testTable)
         {
             _logger.LogDebug("get message with testtable");
         }

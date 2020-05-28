@@ -1,0 +1,4 @@
+$connectString = "Server=.;Database=BFF;Trusted_Connection=True;MultipleActiveResultSets=true"
+$tables = "-t TestTable"
+$scaffoldCmd = "dotnet ef dbcontext scaffold `"$connectString`" Microsoft.EntityFrameworkCore.SqlServer -f $tables -c AppDbContext -o Models --context-dir EfDbContext"
+Invoke-Expression $scaffoldCmd

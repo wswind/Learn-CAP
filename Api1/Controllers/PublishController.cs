@@ -1,8 +1,9 @@
-﻿using Api1.Poco;
-using CommonLib.Sql;
+﻿using CommonLib.Sql;
 using Dapper.Contrib.Extensions;
 using DotNetCore.CAP;
 using Microsoft.AspNetCore.Mvc;
+using Api1.EfDbContext;
+using System;
 
 namespace Api1.Controllers
 {
@@ -27,16 +28,33 @@ namespace Api1.Controllers
                 using (var transaction = connection.BeginTransaction(_capBus, autoCommit: true))
                 {
                     //your business logic code
-                    TestTable testTable = new TestTable()
+                    Api1.Poco.TestTable testTable = new Api1.Poco.TestTable()
                     {
                         A = "f",
                         B = "g"
                     };
-                    connection.Insert<TestTable>(testTable, transaction);
-                    _capBus.Publish("testtable.insert", testTable);
+                    connection.Insert<Api1.Poco.TestTable>(testTable, transaction);
+                    _capBus.Publish("testtable.insert.dapper", testTable);
                 }
             }
-            return Ok();
+            return Ok("dapper ok");
+        }
+        [Route("~/ef/transaction")]
+        public IActionResult EntityFrameworkWithTransaction([FromServices] AppDbContext dbContext)
+        {
+            using (var trans = dbContext.Database.BeginTransaction(_capBus, autoCommit: true))
+            {
+                Api1.Models.TestTable testTable = new Api1.Models.TestTable()
+                {
+                    A = "f",
+                    B = "g"
+                };
+                dbContext.TestTable.Add(testTable);
+                dbContext.SaveChanges();
+                _capBus.Publish("testtable.insert.efcore", testTable);
+            }
+
+            return Ok("ef ok");
         }
     }
 }
