@@ -24,8 +24,7 @@ namespace Api1
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            //builder.RegisterType<AspectEventAutoCommit>();
-            builder.RegisterType<AppService>().As<IAppService>()
+            builder.RegisterType<AppService>().As<IAppService>().InstancePerDependency()
                 .EnableInterfaceInterceptors().InterceptedBy(typeof(AspectEventAutoCommit));
         }
 
