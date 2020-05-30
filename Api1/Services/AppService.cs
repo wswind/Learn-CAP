@@ -1,4 +1,5 @@
-﻿using Api1.EfDbContext;
+﻿using Api1.AOP;
+using Api1.EfDbContext;
 using DotNetCore.CAP;
 using System;
 using System.Collections.Generic;
@@ -15,27 +16,24 @@ namespace Api1.Services
     public class AppService : IAppService
     {
         private AppDbContext _dbContext;
-        private ICapPublisher _capPublisher;
+        private ICapPublishContext _capPublishContext;
 
-        public AppService(AppDbContext dbContext, ICapPublisher capPublisher)
+        public AppService(AppDbContext dbContext, ICapPublishContext capPublishContext)
         {
             _dbContext = dbContext;
-            _capPublisher = capPublisher;
+            _capPublishContext = capPublishContext;
         }
 
         public void InsertTesttable()
         {
-            using (var trans = _dbContext.Database.BeginTransaction(_capPublisher, autoCommit: true))
+            Api1.Models.TestTable testTable = new Api1.Models.TestTable()
             {
-                Api1.Models.TestTable testTable = new Api1.Models.TestTable()
-                {
-                    A = "f",
-                    B = "g"
-                };
-                _dbContext.TestTable.Add(testTable);
-                _dbContext.SaveChanges();
-                _capPublisher.Publish("testtable.insert.efcore", testTable);
-            }
+                A = "f",
+                B = "g"
+            };
+            _dbContext.TestTable.Add(testTable);
+            _dbContext.SaveChanges();
+            _capPublishContext.ConfigurePublishAction(p => p.Publish("testtable.insert.efcore", testTable));
         }
     }
 }

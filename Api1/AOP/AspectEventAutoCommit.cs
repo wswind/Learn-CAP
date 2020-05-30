@@ -7,22 +7,21 @@ namespace Api1.AOP
 {
     public class AspectEventAutoCommit : IInterceptor
     {
-        private AppDbContext _dbContext;
-        private ICapPublisher _capPublisher;
+        private readonly ICapPublishContext _capPublishContext;
 
-        public AspectEventAutoCommit(AppDbContext dbContext, ICapPublisher capPublisher)
+        public AspectEventAutoCommit(ICapPublishContext capPublishContext)
         {
-            _dbContext = dbContext;
-            _capPublisher = capPublisher;
+            _capPublishContext = capPublishContext;
+           
         }
 
         public void Intercept(IInvocation invocation)
         {
-            using (var trans = _dbContext.Database.BeginTransaction(_capPublisher, autoCommit: true))
+            using (var trans = _capPublishContext.BeginTransaction())
             {
-
+                invocation.Proceed();
+                _capPublishContext.Publish();
             }
-                
         }
     }
 }
