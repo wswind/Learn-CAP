@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Api1.AOP;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using Autofac.Extensions.DependencyInjection;
+using System;
 
 namespace Api1
 {
@@ -34,7 +36,6 @@ namespace Api1
             const string connName = "Default";
             string connString = Configuration.GetConnectionString(connName);
             services.AddDbContext<AppDbContext>(x=>x.UseSqlServer(connString));
-            
             services.AddTransient<ISubscriberService, SubscriberService>();
             services.AddScoped<ICapPublishContext, CapPublishContext>();
             services.AddCap(x =>
