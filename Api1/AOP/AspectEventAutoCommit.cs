@@ -1,7 +1,4 @@
-﻿using Api1.EfDbContext;
-using Castle.DynamicProxy;
-using DotNetCore.CAP;
-using System;
+﻿using Castle.DynamicProxy;
 
 namespace Api1.AOP
 {
@@ -20,7 +17,11 @@ namespace Api1.AOP
             using (var trans = _capPublishContext.BeginTransaction())
             {
                 invocation.Proceed();
-                _capPublishContext.Publish();
+                var attr = CapPublishAttribute.GetAttributeByMethodInfo(invocation.MethodInvocationTarget);
+                if(attr != null)
+                {
+                    _capPublishContext.Publish(attr.EventName);
+                }
             }
         }
     }

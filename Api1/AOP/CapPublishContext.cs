@@ -6,38 +6,34 @@ using System;
 namespace Api1.AOP
 {
     public interface ICapPublishContext
-    {
-        public void ConfigurePublishAction(Action<ICapPublisher> action);
+    {       
         public IDbContextTransaction BeginTransaction();
-        public void Publish();
+        public void Publish(string eventName);
+        public object ContentObj { get; set; }
     }
 
     public class CapPublishContext : ICapPublishContext
     {
         public CapPublishContext(ICapPublisher capPublisher, AppDbContext dbContext)
         {
-            _action = x => { };
             _capPublisher = capPublisher;
             _dbContext = dbContext;
+            ContentObj = null;
         }
 
-        private Action<ICapPublisher> _action;
+     
         private readonly ICapPublisher _capPublisher;
         private readonly AppDbContext _dbContext;
-
-        public void ConfigurePublishAction(Action<ICapPublisher> action)
-        {
-            _action = action;
-        }
-
+        public object ContentObj { get; set; }
         public IDbContextTransaction BeginTransaction()
         {
             return _dbContext.Database.BeginTransaction(_capPublisher, autoCommit: true);
         }
 
-        public void Publish()
+        public void Publish(string eventName)
         {
-            _action.Invoke(_capPublisher); 
+            if(ContentObj != null)
+                _capPublisher.Publish(eventName, ContentObj);
         }
     }
 }
