@@ -9,7 +9,7 @@ namespace Api1.AOP
     {       
         public IDbContextTransaction BeginTransaction();
         public void Publish(string eventName);
-        public object ContentObj { get; set; }
+        public void SetContentObj(object obj);
     }
 
     public class CapPublishContext : ICapPublishContext
@@ -18,13 +18,13 @@ namespace Api1.AOP
         {
             _capPublisher = capPublisher;
             _dbContext = dbContext;
-            ContentObj = null;
+            _contentObj = null;
         }
 
      
         private readonly ICapPublisher _capPublisher;
         private readonly AppDbContext _dbContext;
-        public object ContentObj { get; set; }
+        private object _contentObj;
         public IDbContextTransaction BeginTransaction()
         {
             return _dbContext.Database.BeginTransaction(_capPublisher, autoCommit: true);
@@ -32,8 +32,13 @@ namespace Api1.AOP
 
         public void Publish(string eventName)
         {
-            if(ContentObj != null)
-                _capPublisher.Publish(eventName, ContentObj);
+            if(_contentObj != null)
+                _capPublisher.Publish(eventName, _contentObj);
+        }
+
+        public void SetContentObj(object obj)
+        {
+            _contentObj = obj;
         }
     }
 }

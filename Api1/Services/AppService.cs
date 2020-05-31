@@ -33,7 +33,7 @@ namespace Api1.Services
             };
             _dbContext.TestTable.Add(testTable);
             _dbContext.SaveChanges();
-            _capPublishContext.ContentObj = testTable;
+            _capPublishContext.SetContentObj(testTable);
         }
     }
 }
