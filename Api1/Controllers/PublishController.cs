@@ -1,10 +1,5 @@
-﻿using CommonLib.Sql;
-using Dapper.Contrib.Extensions;
-using DotNetCore.CAP;
+﻿using Api1.Services;
 using Microsoft.AspNetCore.Mvc;
-using Api1.EfDbContext;
-using System;
-using Api1.Services;
 
 namespace Api1.Controllers
 {

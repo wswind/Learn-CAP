@@ -1,5 +1,6 @@
 ﻿using Api1.EfDbContext;
 using DotNetCore.CAP;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 
@@ -14,7 +15,7 @@ namespace Api1.AOP
 
     public class CapPublishContext : ICapPublishContext
     {
-        public CapPublishContext(ICapPublisher capPublisher, AppDbContext dbContext)
+        public CapPublishContext(ICapPublisher capPublisher, DbContext dbContext)
         {
             _capPublisher = capPublisher;
             _dbContext = dbContext;
@@ -23,7 +24,7 @@ namespace Api1.AOP
 
      
         private readonly ICapPublisher _capPublisher;
-        private readonly AppDbContext _dbContext;
+        private readonly DbContext _dbContext;
         private object _contentObj;
         public IDbContextTransaction BeginTransaction()
         {

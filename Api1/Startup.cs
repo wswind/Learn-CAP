@@ -1,17 +1,13 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using CommonLib.Sql;
-using static Api1.Services.SubscriberService;
-using Api1.Services;
-using Api1.EfDbContext;
-using Microsoft.EntityFrameworkCore;
 using Api1.AOP;
+using Api1.EfDbContext;
+using Api1.Services;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
-using Autofac.Extensions.DependencyInjection;
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api1
 {
@@ -51,6 +47,7 @@ namespace Api1
             services.AddControllers();
             services.AddTransient<AspectEventAutoCommit>();
             services.AddScoped<ICapPublishContext, CapPublishContext>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

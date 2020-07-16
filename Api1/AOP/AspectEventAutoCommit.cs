@@ -17,7 +17,7 @@ namespace Api1.AOP
             using (var trans = _capPublishContext.BeginTransaction())
             {
                 invocation.Proceed();
-                var attr = CapPublishAttribute.GetAttributeByMethodInfo(invocation.MethodInvocationTarget);
+                var attr = EventPublishAttribute.GetAttributeByMethodInfo(invocation.MethodInvocationTarget);
                 if(attr != null)
                 {
                     _capPublishContext.Publish(attr.EventName);

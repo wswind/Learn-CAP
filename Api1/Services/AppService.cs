@@ -23,7 +23,7 @@ namespace Api1.Services
             _dbContext = dbContext;
             _capPublishContext = capPublishContext;
         }
-        [CapPublish(EventName = "testtable.insert.efcore")]
+        [EventPublish(EventName = "testtable.insert.efcore")]
         public void InsertTesttable()
         {
             Api1.Models.TestTable testTable = new Api1.Models.TestTable()
